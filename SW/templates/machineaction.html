@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Machine Action</title>
+
+    <!-- 외부 CSS 파일 연결 -->
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='machineaction.css') }}"
+    />
+  </head>
+  <body class="machineaction">
+    <!-- 네비게이션 바와 사이드바 포함 -->
+    {% include 'navbar.html' %} {% include 'sidebar.html' %}
+
+    <!-- 본문 내용 -->
+    <div class="content">
+      <!-- 버튼 2개 생성 -->
+      <div class="button-container">
+        <button class="action-button" onclick="startMachine()">
+          머신 시작
+        </button>
+      </div>
+    </div>
+
+    <!-- 모달 창 -->
+    <div id="machineModal" class="modal">
+      <div class="modal-content">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <h2>실시간 영상</h2>
+        <img
+          id="realTimeImageInModal"
+          src="{{ url_for('machine.video_feed_route') }}"
+          style="width: 100%; max-width: 600px;"
+        />
+        <button class="action-button" onclick="stopMachine()">머신 종료</button>
+      </div>
+    </div>
+
+    <script>
+      // 모달 열기 및 닫기
+      function openModal() {
+          document.getElementById('machineModal').style.display = 'block';
+      }
+      function closeModal() {
+          document.getElementById('machineModal').style.display = 'none';
+      }
+
+      // 머신 시작: YOLO와 Raspberry Pi 실행
+      function startMachine() {
+            // 소켓 데이터 전송 함수 호출
+            sendSocketData();
+
+            // 모달 열기
+            openModal();
+        }
+
+        function stopMachine(){
+            sendSocketData1();
+            closeModal();
+        }
+
+
+        function sendSocketData() {
+            fetch('/machine/send_start', {
+                method: 'POST',
+            })
+            .then(response => response.text())
+            .then(data => {
+                // alert(data);  // 서버 응답 메시지 출력
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('소켓 데이터 전송 중 오류가 발생했습니다.');
+            });
+
+
+        }
+
+        function sendSocketData1() {
+            fetch('/machine/send_stop', {
+                method: 'POST',
+            })
+            .then(response => response.text())
+            .then(data => {
+                // alert(data);  // 서버 응답 메시지 출력
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('소켓 데이터 전송 중 오류가 발생했습니다.');
+            });
+        }
+    </script>
+  </body>
+</html>

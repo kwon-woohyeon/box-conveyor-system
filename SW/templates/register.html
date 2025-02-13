@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>회원가입</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='register.css') }}"
+    />
+  </head>
+  <body>
+    <div class="register">
+      <div class="register-container">
+        <div class="login-top">
+          <i class="fas fa-times myorderdetail-icon" onclick="closeModal()"></i>
+        </div>
+        <h1 class="register-h1">회원가입</h1>
+
+        <form method="POST" action="{{ url_for('auth.register_user') }}">
+          <div class="register-list">
+            <span class="register-left"
+              >아이디<em class="register-em">*</em></span
+            >
+            <div class="register-input-wrap">
+              <input
+                type="text"
+                placeholder="아이디 입력"
+                name="username"
+                class="register-input"
+                required
+              />
+              <div
+                id="username-error"
+                class="register-input-error"
+                style="display: none;"
+              >
+                필수 항목입니다.
+              </div>
+            </div>
+          </div>
+
+          <div class="register-list">
+            <span class="register-left"
+              >비밀번호<em class="register-em">*</em></span
+            >
+            <div class="register-input-wrap">
+              <input
+                type="password"
+                placeholder="비밀번호(영문·숫자 조합 8~15자리)"
+                name="password"
+                class="register-input"
+                required
+              />
+              <div
+                id="password-error"
+                class="register-input-error"
+                style="display: none;"
+              >
+                필수 항목입니다.
+              </div>
+            </div>
+          </div>
+
+          <div class="register-list">
+            <span class="register-left"
+              >이름<em class="register-em">*</em></span
+            >
+            <div class="register-input-wrap">
+              <input
+                type="text"
+                placeholder="이름 입력"
+                name="name"
+                class="register-input"
+                required
+              />
+              <div
+                id="name-error"
+                class="register-input-error"
+                style="display: none;"
+              >
+                필수 항목입니다.
+              </div>
+            </div>
+          </div>
+
+          <div class="register-list">
+            <span class="register-left"
+              >연락처<em class="register-em">*</em></span
+            >
+            <div class="register-input-wrap">
+              <input
+                type="text"
+                placeholder="연락처(숫자만 입력)"
+                name="phone"
+                class="register-input"
+                required
+              />
+              <div
+                id="phone-error"
+                class="register-input-error"
+                style="display: none;"
+              >
+                필수 항목입니다.
+              </div>
+            </div>
+          </div>
+
+          <div class="register-agreement">
+            <div>
+              <input type="checkbox" id="agree-all" required /><label
+                ><b>전체동의</b></label
+              >
+            </div>
+            <div>
+              <input type="checkbox" id="age-check" required /><label
+                >만 14세 이상입니다. (필수)</label
+              >
+            </div>
+            <div>
+              <input type="checkbox" id="terms-check" required /><label
+                >권우현의 머신 <a href="/">이용 약관</a> 동의 (필수)</label
+              >
+            </div>
+            <div>
+              <input type="checkbox" id="privacy-check" required /><label
+                ><a href="/">개인정보 수집 및 이용</a> 동의 (필수)</label
+              >
+            </div>
+          </div>
+          <button type="submit" class="register-button">완료</button>
+        </form>
+      </div>
+    </div>
+    <script>
+      // 전체동의 체크박스와 나머지 체크박스를 변수로 가져옴
+      const agreeAllCheckbox = document.getElementById('agree-all');
+       const ageCheckbox = document.getElementById('age-check');
+       const termsCheckbox = document.getElementById('terms-check');
+       const privacyCheckbox = document.getElementById('privacy-check');
+
+       // 전체동의 체크박스를 클릭했을 때 실행되는 함수
+       agreeAllCheckbox.addEventListener('change', function() {
+           const isChecked = agreeAllCheckbox.checked;
+
+           // 전체동의가 체크되면 나머지 체크박스도 체크되도록 설정
+           ageCheckbox.checked = isChecked;
+           termsCheckbox.checked = isChecked;
+           privacyCheckbox.checked = isChecked;
+       });
+    </script>
+  </body>
+</html>

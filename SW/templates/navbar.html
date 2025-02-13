@@ -1,0 +1,31 @@
+<div class="nav">
+  <div class="header-title">Main Program</div>
+  <div class="user-id">
+    {% if session['is_admin'] == 1 %} (관리자) {{ session['name'] }}님,
+    안녕하세요 {% else %} {{ session['name'] }}님, 안녕하세요 {% endif %}
+  </div>
+</div>
+<style>
+  .nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background-color: #333;
+      color: white;
+      padding: 20px 350px;  /* 상하 패딩과 좌우 여백 */
+      box-sizing: border-box;  /* padding이 width에 포함되도록 설정 */
+      height: 100px;  /* 헤더 높이를 고정 */
+      width: 100%;  /* 헤더가 가로로 화면을 꽉 채우도록 설정 */
+      margin: 0;
+      position: fixed;  /* 헤더를 화면 상단에 고정 */
+      top: 0;  /* 화면 맨 위에 배치 */
+      left: 0;
+      z-index: 1000;  /* 다른 요소들 위에 위치 */
+  }
+
+  /* 헤더 타이틀 */
+  .header-title {
+      font-size: 4em;  /* 타이틀 폰트 크기 키움 */
+      font-weight: 500;
+  }
+</style>

@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>운송장 정보</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='boxdata.css') }}"
+    />
+  </head>
+  <body>
+    <div class="box-info-container">
+      <h1>운송장 정보</h1>
+      {% include 'navbar.html' %} {% include 'sidebar.html' %}
+
+      <!-- 테이블 -->
+      <table class="box-info-table">
+        <thead>
+          <tr>
+            <th rowspan="2">운송장번호</th>
+            <th rowspan="2">보내는 사람</th>
+            <th colspan="3">받는 사람</th>
+            <th rowspan="2">이미지</th>
+            <th rowspan="2">불량유무</th>
+            <th rowspan="2">비고</th>
+          </tr>
+          <tr>
+            <th>이름</th>
+            <th>주소</th>
+            <th>연락처</th>
+          </tr>
+        </thead>
+        <tbody id="shippingTableBody">
+          {% for item in results %}
+          <tr>
+            <td>{{ item.qr_data_id }}</td>
+            <td>{{ item.send_name }}</td>
+            <td>{{ item.receive_name }}</td>
+            <td>{{ item.receive_address }}</td>
+            <td>{{ item.receive_phone }}</td>
+            <td>
+              <a
+                href="javascript:void(0);"
+                onclick="openModal('{{ item.image }}')"
+                >이미지</a
+              >
+            </td>
+            <td>{{ "정상" if item.status_code_id == 1 else "불량" }}</td>
+            <td>{{ item.status_description }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+
+      <!-- 모달 창 -->
+      <div id="imageModal" class="modal">
+        <div class="modal-content">
+          <span class="close" onclick="closeModal()">&times;</span>
+          <img id="modalImage" src="" alt="큰 이미지" />
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // 모달 열기
+      function openModal(imageSrc) {
+        const modalImageUrl = "/" + imageSrc;
+          document.getElementById('imageModal').style.display = "block";
+          document.getElementById('modalImage').src = modalImageUrl;
+          console.log("모달 이미지 경로: ", modalImageUrl);
+      }
+
+      // 모달 닫기
+      function closeModal() {
+          document.getElementById('imageModal').style.display = "none";
+      }
+
+      // 모달을 클릭 외부 영역을 클릭하면 닫기
+      window.onclick = function(event) {
+          const modal = document.getElementById('imageModal');
+          if (event.target === modal) {
+              modal.style.display = "none";
+          }
+      }
+    </script>
+  </body>
+</html>

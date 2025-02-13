@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>유저 정보</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='userdata.css') }}"
+    />
+  </head>
+  <body>
+    <div class="user-info-container">
+      {% include 'navbar.html' %} {% include 'sidebar.html' %}
+      <h1>유저 정보</h1>
+
+      <!-- 유저 정보 테이블 -->
+      <div class="user-main">
+        <table class="user-info-table">
+          <thead>
+            <tr>
+              <th>아이디</th>
+              <th>이름</th>
+              <th>폰 넘버</th>
+              <th>관리자 유무</th>
+              <th>회원 가입 날짜</th>
+              <th>회원 정보 수정일</th>
+              <th>관리</th>
+            </tr>
+          </thead>
+          <tbody id="userTableBody">
+            {% for user in users %}
+            <tr>
+              <td>{{ user.username }}</td>
+              <td>{{ user.name }}</td>
+              <td>{{ user.phone }}</td>
+              <td>{{ '관리자' if user.is_admin else '회원' }}</td>
+              <td>{{ user.created_date }}</td>
+              <td>{{ user.updated_date or '-' }}</td>
+              <td>
+                <button onclick="editUser('{{ user.id }}')">수정</button>
+                <button onclick="deleteUser('{{ user.id }}')">삭제</button>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+
+      <!-- 모달 창 -->
+      <div id="myModal" class="modal">
+        <div class="modal-content">
+          <span class="close" onclick="closeModal()">&times;</span>
+          <h2>유저 데이터 수정</h2>
+          <form id="userForm" onsubmit="updateUser(event)">
+            <input type="hidden" id="user_id" name="user_id" />
+            <label for="user_username">아이디</label>
+            <input
+              type="text"
+              id="user_username"
+              name="user_username"
+              required
+            />
+
+            <label for="user_name">이름</label>
+            <input type="text" id="user_name" name="user_name" required />
+
+            <label for="user_phone">폰 넘버</label>
+            <input type="text" id="user_phone" name="user_phone" required />
+
+            <label for="isAdmin">관리자 유무</label>
+            <select id="isAdmin" name="isAdmin">
+              <option value="yes">예</option>
+              <option value="no">아니오</option>
+            </select>
+            <button type="submit" class="action1-button">수정하기</button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // 유저 정보 불러오기 (모달에 표시)
+      function editUser(user_id) {
+          fetch(`/api/users/${user_id}`)
+              .then(response => response.json())
+              .then(user => {
+                  document.getElementById('user_id').value = user.id;
+                  document.getElementById('user_username').value = user.username;
+                  document.getElementById('user_name').value = user.name;
+                  document.getElementById('user_phone').value = user.phone;
+                  document.getElementById('isAdmin').value = user.is_admin ? 'yes' : 'no';
+                  openModal();
+              })
+              .catch(error => console.error('Error:', error));
+      }
+
+      // 유저 수정 처리 함수
+      function updateUser(event) {
+          event.preventDefault();
+          const user_id = document.getElementById('user_id').value;
+          const userData = {
+              username: document.getElementById('user_username').value,
+              name: document.getElementById('user_name').value,
+              phone: document.getElementById('user_phone').value,
+              is_admin: document.getElementById('isAdmin').value === 'yes' ? 1 : 0
+          };
+
+          fetch(`/api/users/${user_id}`, {
+              method: 'PUT',
+              headers: {
+                  'Content-Type': 'application/json'
+              },
+              body: JSON.stringify(userData)
+          })
+          .then(response => {
+              if (!response.ok) {
+                  throw new Error("Network response was not ok");
+              }
+              return response.json();
+          })
+          .then(data => {
+              alert('유저 정보가 수정되었습니다.');
+              closeModal();
+              location.reload();
+          })
+          .catch(error => console.error('Error:', error));
+      }
+
+      // 유저 삭제 처리
+      function deleteUser(user_id) {
+          if (confirm('정말로 이 유저를 삭제하시겠습니까?')) {
+              fetch(`/api/users/${user_id}`, {
+                  method: 'DELETE'
+              })
+              .then(response => {
+                  if (!response.ok) {
+                      throw new Error('Network response was not ok');
+                  }
+                  return response.json();
+              })
+              .then(data => {
+                  alert('유저가 삭제되었습니다.');
+                  location.reload();
+              })
+              .catch(error => console.error('Error:', error));
+          }
+      }
+
+      // 모달 창 열기
+      function openModal() {
+          document.getElementById('myModal').style.display = 'block';
+      }
+
+      // 모달 창 닫기
+      function closeModal() {
+          document.getElementById('myModal').style.display = 'none';
+      }
+    </script>
+  </body>
+</html>

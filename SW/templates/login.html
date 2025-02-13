@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Log In</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='login.css') }}"
+    />
+  </head>
+  <body class="login-body">
+    <div class="login">
+      <div class="login-container">
+        <div class="login-top">
+          <i class="fas fa-times myorderdetail-icon" onclick="closeModal()"></i>
+        </div>
+        <h1 class="login-h1">Log In</h1>
+
+        <form method="POST" action="{{ url_for('auth.login_user') }}">
+          <div class="login-list">
+            <span class="login-left">아이디<em class="login-em">*</em></span>
+            <div class="login-input-wrap">
+              <input
+                type="text"
+                placeholder="아이디 입력"
+                name="username"
+                class="login-input"
+                required
+              />
+              <div
+                id="username-error"
+                class="login-input-error"
+                style="display: none"
+              >
+                필수 항목입니다.
+              </div>
+            </div>
+          </div>
+
+          <div class="login-list">
+            <span class="login-left">비밀번호<em class="login-em">*</em></span>
+            <div class="login-input-wrap">
+              <input
+                type="password"
+                placeholder="비밀번호 입력"
+                name="password"
+                class="login-input"
+                required
+              />
+              <div
+                id="password-error"
+                class="login-input-error"
+                style="display: none"
+              >
+                필수 항목입니다.
+              </div>
+            </div>
+          </div>
+
+          <button type="submit" class="login-button">로그인</button>
+        </form>
+
+        <div class="login-register-link">
+          <p>
+            계정이 없으신가요?
+            <a href="{{ url_for('auth.register_user') }}">회원가입</a>
+          </p>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

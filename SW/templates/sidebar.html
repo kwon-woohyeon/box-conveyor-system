@@ -1,0 +1,84 @@
+<div class="sidebar">
+  <ul>
+    <li><a href="/machine">머신 동작</a></li>
+    <li><a href="/api/qr/all">택배 데이터 관리</a></li>
+    {% if session.get('is_admin') == 1 %}
+    <li><a href="/api/users">유저 데이터 관리</a></li>
+    {% endif %}
+    <li>
+      <form action="{{ url_for('auth.logout_user') }}" method="post">
+        <button class="sidebar-logout-btn" type="submit">로그 아웃</button>
+      </form>
+    </li>
+  </ul>
+</div>
+
+<style>
+  /* 사이드바 스타일 */
+  .sidebar {
+      width: 250px; /* 사이드바의 너비 */
+      background-color: #333; /* 배경색 */
+      color: white; /* 글자색 */
+      height: 100vh; /* 화면 전체 높이를 차지 */
+      position: fixed; /* 화면 고정 */
+      top: 0;
+      left: 0;
+      padding-top: 150px; /* 상단 여백을 50px로 설정 */
+      z-index: 1000; /* 다른 요소보다 위에 위치하도록 설정 */
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start; /* 위쪽으로 정렬 */
+      gap: 10px; /* 항목 간격을 일정하게 설정 */
+  }
+
+  /* 사이드바 목록 스타일 */
+  .sidebar ul {
+      list-style-type: none; /* 기본 리스트 스타일 제거 */
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-direction: column; /* 세로로 배치 */
+      justify-content: center; /* 세로 중앙 정렬 */
+      align-items: flex-start; /* 좌측 정렬 */
+      gap: 15px; /* 항목 간의 간격 */
+  }
+
+  /* 사이드바 항목 스타일 */
+  .sidebar li {
+      width: 100%; /* 링크가 가로로 꽉 차도록 설정 */
+  }
+
+  /* 사이드바 링크 스타일 */
+  .sidebar a {
+      display: block; /* 링크를 블록 수준으로 표시하여 버튼처럼 만들기 */
+      color: white; /* 텍스트 색상 */
+      padding: 15px 20px; /* 패딩 추가 */
+      font-size: 1.1em; /* 글자 크기 */
+      text-decoration: none; /* 기본 링크 스타일 제거 */
+      border-radius: 5px; /* 버튼 모양처럼 둥글게 만들기 */
+      transition: background-color 0.3s; /* 마우스 올릴 때 배경색 부드럽게 변경 */
+  }
+
+  /* 링크에 마우스를 올렸을 때 색상 변경 */
+  .sidebar a:hover .sidebar-logout-btn:hover   {
+      background-color: #4edde7; /* 배경색 변경 */
+      color: #fff; /* 텍스트 색상 */
+  }
+
+  .sidebar-logout-btn{
+    background: none;
+    border: none;
+    cursor: pointer;
+    display: block; /* 링크를 블록 수준으로 표시하여 버튼처럼 만들기 */
+    color: white; /* 텍스트 색상 */
+    padding: 15px 20px; /* 패딩 추가 */
+    font-size: 1.1em; /* 글자 크기 */
+    text-decoration: none; /* 기본 링크 스타일 제거 */
+    border-radius: 5px; /* 버튼 모양처럼 둥글게 만들기 */
+    transition: background-color 0.3s; /* 마우스 올릴 때 배경색 부드럽게 변경 */
+  }
+
+  .sidebar li:last-child {
+      margin-top: 500px; /* 마지막 항목에 마진을 추가하여 아래로 밀어냄 */
+  }
+</style>
